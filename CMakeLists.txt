@@ -40,7 +40,7 @@ project(
 
 option(DCC_STANDARD_COMPLIANCE "Standard compliance" OFF)
 set(DCC_MANUFACTURER_ID
-    145u
+    13u
     CACHE STRING "Manufacturer ID")
 set(DCC_MAX_PACKET_SIZE
     18u

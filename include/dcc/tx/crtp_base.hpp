@@ -104,6 +104,7 @@ struct CrtpBase {
       /// of pop_front().
       _deque.pop_front();
     }
+    _bit_position = 0uz;
     return packetTiming();
   }
 
@@ -129,6 +130,7 @@ private:
     toggleTrackOutputs();
     auto const retval{*_first};
     ++_first;
+    ++_bit_position;
     return retval;
   }
 
@@ -192,10 +194,20 @@ private:
 
   /// Toggle track outputs
   void toggleTrackOutputs() {
-    if constexpr (requires(T t, bool N, bool P) {
-                    { t.trackOutputs(N, P) };
+    if constexpr (requires(T t, bool N, bool P, bool F) {
+                    { t.trackOutputs(N, P, F) };
                   }) {
       // By default the phase is "positive", so P > N for the first half bit.
+      // Check if this is the first bit after preamble when trigger flag is set
+      bool const is_first_bit = _cfg.flags.trigger && 
+                                (_bit_position == _cfg.num_preamble * 2uz);
+      impl().trackOutputs(_polarity, !_polarity, is_first_bit);
+      _polarity = !_polarity;
+    }
+    else if constexpr (requires(T t, bool N, bool P) {
+                         { t.trackOutputs(N, P) };
+                       }) {
+      // Fallback for implementations without the third parameter
       impl().trackOutputs(_polarity, !_polarity);
       _polarity = !_polarity;
     }
@@ -211,9 +223,10 @@ private:
   decltype(std::begin(_idle_packet)) _first{std::begin(_idle_packet)};
   decltype(std::cend(_idle_packet)) _last{std::cend(_idle_packet)};
 
-  size_t _bidi_count{}; ///< Count BiDi timings
-  Config _cfg{};        ///< Configuration
-  bool _polarity{};     ///< Track polarity
+  size_t _bidi_count{};    ///< Count BiDi timings
+  size_t _bit_position{};  ///< Current bit position in packet
+  Config _cfg{};           ///< Configuration
+  bool _polarity{};        ///< Track polarity
 };
 
 } // namespace dcc::tx
