@@ -343,7 +343,7 @@ struct CommandStation : dcc::tx::CrtpBase<CommandStation> {
 
 private:
   // Write track outputs
-  void trackOutputs(bool N, bool P);
+  void trackOutputs(bool N, bool P, bool F);
 
   // Packet end
   void packetEnd();

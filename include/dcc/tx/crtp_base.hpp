@@ -93,11 +93,13 @@ struct CrtpBase {
     if (empty(_deque)) {
       _first = begin(_idle_packet);
       _last = cend(_idle_packet);
+      _is_idle_packet = true;
     }
     // Deque contains packet, transmit it
     else {
       _first = begin(_deque.front());
       _last = cend(_deque.front());
+      _is_idle_packet = false;
       /// \warning
       /// Careful! This only works because of the design of ztl::inplace_deque.
       /// The element currently pointed to will stay valid until the next call
@@ -199,7 +201,8 @@ private:
                   }) {
       // By default the phase is "positive", so P > N for the first half bit.
       // Check if this is the first bit after preamble when trigger flag is set
-      bool const is_first_bit = _cfg.flags.trigger && 
+      // and only trigger on non-idle packets
+      bool const is_first_bit = _cfg.flags.trigger && !_is_idle_packet &&
                                 (_bit_position == _cfg.num_preamble * 2uz);
       impl().trackOutputs(_polarity, !_polarity, is_first_bit);
       _polarity = !_polarity;
@@ -227,6 +230,7 @@ private:
   size_t _bit_position{};  ///< Current bit position in packet
   Config _cfg{};           ///< Configuration
   bool _polarity{};        ///< Track polarity
+  bool _is_idle_packet{};  ///< True if currently transmitting idle packet
 };
 
 } // namespace dcc::tx
