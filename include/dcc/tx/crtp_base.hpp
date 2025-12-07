@@ -200,9 +200,8 @@ private:
                     { t.trackOutputs(N, P, F) };
                   }) {
       // By default the phase is "positive", so P > N for the first half bit.
-      // Check if this is the first bit after preamble when trigger flag is set
-      // and only trigger on non-idle packets
-      bool const is_first_bit = _cfg.flags.trigger && !_is_idle_packet &&
+      // Send first bit indication after preamble for non-idle packets
+      bool const is_first_bit = !_is_idle_packet &&
                                 (_bit_position == _cfg.num_preamble * 2uz);
       impl().trackOutputs(_polarity, !_polarity, is_first_bit);
       _polarity = !_polarity;

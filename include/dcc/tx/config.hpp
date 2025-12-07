@@ -27,7 +27,6 @@ struct Config {
   struct {
     /// Enable BiDi
     bool bidi{true};
-    bool trigger{false};
   } flags{};
 };
 
