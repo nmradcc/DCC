@@ -94,12 +94,15 @@ struct CrtpBase {
       _first = begin(_idle_packet);
       _last = cend(_idle_packet);
       _is_idle_packet = true;
+      ++_idle_packet_count;  // Increment idle packet counter
     }
     // Deque contains packet, transmit it
     else {
       _first = begin(_deque.front());
       _last = cend(_deque.front());
       _is_idle_packet = false;
+      _last_idle_packet_count = _idle_packet_count;  // Save count before reset
+      _idle_packet_count = 0;  // Reset idle packet counter
       /// \warning
       /// Careful! This only works because of the design of ztl::inplace_deque.
       /// The element currently pointed to will stay valid until the next call
@@ -119,6 +122,16 @@ struct CrtpBase {
   ///
   /// \return Deque capacity
   constexpr auto capacity() const { return DCC_TX_DEQUE_SIZE; }
+
+  /// Get idle packet counter
+  ///
+  /// \return Current idle packet count
+  constexpr auto idlePacketCount() const { return _idle_packet_count; }
+
+  /// Get last idle packet counter
+  ///
+  /// \return Last idle packet count before reset
+  constexpr auto lastIdlePacketCount() const { return _last_idle_packet_count; }
 
 private:
   constexpr CrtpBase() = default;
@@ -227,6 +240,8 @@ private:
 
   size_t _bidi_count{};    ///< Count BiDi timings
   size_t _bit_position{};  ///< Current bit position in packet
+  size_t _idle_packet_count{};       ///< Count consecutive idle packets sent
+  size_t _last_idle_packet_count{};  ///< Last idle packet count before reset
   Config _cfg{};           ///< Configuration
   bool _polarity{};        ///< Track polarity
   bool _is_idle_packet{};  ///< True if currently transmitting idle packet
