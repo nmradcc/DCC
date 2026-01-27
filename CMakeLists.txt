@@ -43,7 +43,7 @@ set(DCC_MANUFACTURER_ID
     13u
     CACHE STRING "Manufacturer ID")
 set(DCC_MAX_PACKET_SIZE
-    18u
+    64u
     CACHE STRING "Maximum size of a packet in bytes")
 set(DCC_RX_LOGON_DID_CV_ADDRESS
     249u
@@ -82,13 +82,13 @@ set(DCC_TX_MIN_PREAMBLE_BITS
     8u
     CACHE STRING "Minimum number of preamble bits of command station")
 set(DCC_TX_MAX_PREAMBLE_BITS
-    30u
+    40u
     CACHE STRING "Maximum number of preamble bits of command station")
 set(DCC_TX_MIN_BIT_1_TIMING
-    56u
+    30u
     CACHE STRING "Minimum duration of a 1 bit of command station")
 set(DCC_TX_MAX_BIT_1_TIMING
-    60u
+    80u
     CACHE STRING "Maximum duration of a 1 bit of command station")
 set(DCC_TX_MIN_BIT_0_TIMING
     30u
