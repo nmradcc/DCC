@@ -4,8 +4,6 @@
 
 <img src="https://github.com/ZIMO-Elektronik/DCC/raw/master/data/images/logo.gif" align="right"/>
 
-## NOTE: This repo is a fork of the ZIMO DCC repo. The default DCC_Tester branch contains special modifications to support the DCC_tester project! 
-
 DCC is an acronym for [Digital Command Control](https://en.wikipedia.org/wiki/Digital_Command_Control), a standardized protocol for controlling digital model railways. This C++ library of the same name contains **platform-independent** code to either decode (decoder) or generate (command station) a DCC signal on the track. For both cases, a typical microcontroller timer with microsecond precision is sufficient for implementing a receiver or transmitter class. Also included, but not platform-independent, is an encoder for the [ESP32 RMT](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/rmt.html) peripherals.
 
 The implementation provided here is used in the following products:
@@ -359,7 +357,7 @@ struct CommandStation : dcc::tx::CrtpBase<CommandStation> {
 
 private:
   // Write track outputs
-  void trackOutputs(bool N, bool P, bool F);
+  void trackOutputs(bool N, bool P);
 
   // Packet end
   void packetEnd();

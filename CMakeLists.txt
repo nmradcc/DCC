@@ -40,10 +40,10 @@ project(
 
 option(DCC_STANDARD_COMPLIANCE "Standard compliance" OFF)
 set(DCC_MANUFACTURER_ID
-    13u
+    145u
     CACHE STRING "Manufacturer ID")
 set(DCC_MAX_PACKET_SIZE
-    64u
+    18u
     CACHE STRING "Maximum size of a packet in bytes")
 set(DCC_RX_LOGON_DID_CV_ADDRESS
     249u
@@ -79,22 +79,22 @@ set(DCC_RX_BIDI_DEQUE_SIZE
     7u
     CACHE STRING "Size of the sender deque of decoder")
 set(DCC_TX_MIN_PREAMBLE_BITS
-    8u
+    17u
     CACHE STRING "Minimum number of preamble bits of command station")
 set(DCC_TX_MAX_PREAMBLE_BITS
-    40u
+    30u
     CACHE STRING "Maximum number of preamble bits of command station")
 set(DCC_TX_MIN_BIT_1_TIMING
-    30u
+    56u
     CACHE STRING "Minimum duration of a 1 bit of command station")
 set(DCC_TX_MAX_BIT_1_TIMING
-    80u
+    60u
     CACHE STRING "Maximum duration of a 1 bit of command station")
 set(DCC_TX_MIN_BIT_0_TIMING
-    30u
+    97u
     CACHE STRING "Minimum duration of a 0 bit of command station")
 set(DCC_TX_MAX_BIT_0_TIMING
-    210u
+    114u
     CACHE STRING "Maximum duration of a 0 bit of command station")
 set(DCC_TX_MIN_BIDI_BIT_TIMING
     57u

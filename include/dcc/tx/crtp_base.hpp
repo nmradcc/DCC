@@ -110,15 +110,6 @@ struct CrtpBase {
     _addrs.current = packet.first;
     _first = begin(packet.second);
     _last = cend(packet.second);
-    if (_idle) {
-      _is_idle_packet = true;
-      ++_idle_packet_count;
-    } else {
-      _is_idle_packet = false;
-      _last_idle_packet_count = _idle_packet_count;
-      _idle_packet_count = 0uz;
-    }
-    _bit_position = 0uz;
     return packetTiming();
   }
 
@@ -137,16 +128,6 @@ struct CrtpBase {
   /// \return Address of last transmission
   constexpr auto address() const { return _addrs.last; }
 
-  /// Get idle packet counter
-  ///
-  /// \return Current idle packet count
-  constexpr auto idlePacketCount() const { return _idle_packet_count; }
-
-  /// Get last idle packet counter
-  ///
-  /// \return Last idle packet count before reset
-  constexpr auto lastIdlePacketCount() const { return _last_idle_packet_count; }
-
 private:
   constexpr CrtpBase() = default;
   auto& impl() { return static_cast<T&>(*this); }
@@ -159,7 +140,6 @@ private:
     toggleTrackOutputs();
     auto const retval{*_first};
     ++_first;
-    ++_bit_position;
     return retval;
   }
 
@@ -224,20 +204,10 @@ private:
 
   /// Toggle track outputs
   void toggleTrackOutputs() {
-    if constexpr (requires(T t, bool N, bool P, bool F) {
-                    { t.trackOutputs(N, P, F) };
+    if constexpr (requires(T t, bool N, bool P) {
+                    { t.trackOutputs(N, P) };
                   }) {
       // By default the phase is "positive", so P > N for the first half bit.
-      // Send first bit indication after preamble for non-idle packets
-      bool const is_first_bit = !_is_idle_packet &&
-                                (_bit_position == _cfg.num_preamble * 2uz);
-      impl().trackOutputs(_polarity, !_polarity, is_first_bit);
-      _polarity = !_polarity;
-    }
-    else if constexpr (requires(T t, bool N, bool P) {
-                         { t.trackOutputs(N, P) };
-                       }) {
-      // Fallback for implementations without the third parameter
       impl().trackOutputs(_polarity, !_polarity);
       _polarity = !_polarity;
     }
@@ -258,14 +228,10 @@ private:
   decltype(std::cend(_idle_packet.second)) _last{
     std::cend(_idle_packet.second)};
 
-  size_t _bidi_count{};    ///< Count BiDi timings
-  size_t _bit_position{};  ///< Current bit position in packet
-  size_t _idle_packet_count{};       ///< Count consecutive idle packets sent
-  size_t _last_idle_packet_count{};  ///< Last idle packet count before reset
-  Config _cfg{};           ///< Configuration
-  bool _polarity{};        ///< Track polarity
-  bool _idle{true};        ///< Idle flag
-  bool _is_idle_packet{};  ///< True if currently transmitting idle packet
+  size_t _bidi_count{}; ///< Count BiDi timings
+  Config _cfg{};        ///< Configuration
+  bool _polarity{};     ///< Track polarity
+  bool _idle{true};     ///< Idle flag
 };
 
 } // namespace dcc::tx

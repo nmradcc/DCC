@@ -2,12 +2,7 @@
 #include <cstdio>
 #include "bsp.h"
 
-void CommandStation::trackOutputs(bool N, bool P, bool first_bit) { 
-  bsp_write_track(N, P);
-  // first_bit will be true on the first bit after preamble when trigger flag is set
-  // You can use this to toggle a GPIO, trigger an oscilloscope, etc.
-  (void)first_bit;  // Suppress unused parameter warning
-}
+void CommandStation::trackOutputs(bool N, bool P) { bsp_write_track(N, P); }
 
 CommandStation command_station;
 
