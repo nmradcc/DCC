@@ -2,24 +2,23 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-/// Address group
+/// Receive addresses
 ///
-/// \file   dcc/address_group.hpp
+/// \file   dcc/rx/addresses.hpp
 /// \author Vincent Hamp
-/// \date   02/04/2024
+/// \date   04/01/2022
 
 #pragma once
 
-#include <cstdint>
+#include "../address.hpp"
 
-namespace dcc {
+namespace dcc::rx {
 
-/// Address group (RCN-218)
-enum struct AddressGroup : uint8_t {
-  All = 0b00u,
-  Loco = 0b01u,
-  Acc = 0b10u,
-  Now = 0b11u
+struct Addresses {
+  Address primary{};
+  Address consist{};
+  Address logon{};
+  Address received{};
 };
 
-} // namespace dcc
+} // namespace dcc::rx

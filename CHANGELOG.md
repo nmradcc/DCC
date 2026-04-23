@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.46.5
+- `DCC_STANDARD_COMPLIANCE` determines whether short and long multi-function addresses compare equal ([#151](https://github.com/ZIMO-Elektronik/DCC/issues/151))
+- Bugfix NMRA truncated packet test ([#157](https://github.com/ZIMO-Elektronik/DCC/issues/157))
+
+## 0.46.4
+- Bugfix reset track search after 1s without signal ([#149](https://github.com/ZIMO-Elektronik/DCC/issues/149))
+
+## 0.46.3
+- Rename `make_special_operating_modes` to `make_special_operating_modes_packet`
+- Bugfix copy/paste error at east-west directions ([#147](https://github.com/ZIMO-Elektronik/DCC/issues/147))
+
+## 0.46.2
+- Add getter for address of last transmission to `tx::CrtpBase` ([#140](https://github.com/ZIMO-Elektronik/DCC/issues/140))
+- Bugfix `rx::CrtpBase::init()` clears deques ([#141](https://github.com/ZIMO-Elektronik/DCC/issues/141))
+- Bugfix CV bit manipulation operations mode ([#142](https://github.com/ZIMO-Elektronik/DCC/issues/142))
+
+## 0.46.1
+- Bugfix workaround for old app:info (id3) datagrams in channel 2 ([#138](https://github.com/ZIMO-Elektronik/DCC/issues/138))
+
+## 0.46.0
+- Add `DCCypher` web app ([#126](https://github.com/ZIMO-Elektronik/DCC/pull/126))
+- Add accessory support to `bidi::Dissector` ([#98](https://github.com/ZIMO-Elektronik/DCC/issues/98))
+- Add CV access short form for CV19/20 ([#132](https://github.com/ZIMO-Elektronik/DCC/issues/132))
+- Bugfix incorrect calculation of QoS ([#127](https://github.com/ZIMO-Elektronik/DCC/issues/127))
+- Bugfix hardened instruction decoding ([#128](https://github.com/ZIMO-Elektronik/DCC/issues/128))
+- Bugfix track search does not return consist address ([#133](https://github.com/ZIMO-Elektronik/DCC/issues/133))
+
 ## 0.45.0
 - Block `rx::CrtpBase::biDiChannel1` and `rx::CrtpBase::biDiChannel2` outside of BiDi cutout ([#110](https://github.com/ZIMO-Elektronik/DCC/issues/110))
 - Bugfix [RCN-217](https://normen.railcommunity.de/RCN-217.pdf) explicitly requires that ID0 datagrams must follow any packet ([#113](https://github.com/ZIMO-Elektronik/DCC/issues/113))

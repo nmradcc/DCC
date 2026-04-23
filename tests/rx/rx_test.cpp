@@ -52,8 +52,8 @@ void RxTest::SetUp() {
   }
 }
 
-RxTest* RxTest::Receive(dcc::Packet const& packet) {
-  auto timings{dcc::tx::packet2timings(packet)};
+RxTest* RxTest::Receive(dcc::Packet const& packet, dcc::tx::Config cfg) {
+  auto timings{dcc::tx::packet2timings(packet, cfg)};
   std::ranges::for_each_n(cbegin(timings),
                           size(timings),
                           [this](uint32_t time) { _mock.receive(time); });
@@ -84,6 +84,16 @@ RxTest* RxTest::Execute() {
   return this;
 }
 
+void RxTest::ReceiveAndExecute(dcc::Packet const& packet, dcc::tx::Config cfg) {
+  Receive(packet, cfg)->LeaveCutout()->Execute();
+}
+
+void RxTest::ReceiveAndExecuteTwice(dcc::Packet const& packet,
+                                    dcc::tx::Config cfg) {
+  ReceiveAndExecute(packet, cfg);
+  ReceiveAndExecute(packet, cfg);
+}
+
 void RxTest::EnterServiceMode() {
   EXPECT_CALL(_mock, serviceModeHook(true));
   Receive(dcc::make_reset_packet())->LeaveCutout()->Execute();
@@ -96,7 +106,7 @@ void RxTest::Logon() {
     .WillRepeatedly(Return(_cvs[DCC_RX_LOGON_ADDRESS_CV_ADDRESS + 1uz]));
 
   // Enable
-  Receive(dcc::make_logon_enable_packet(dcc::AddressGroup::Now, _cid, _sid));
+  Receive(dcc::make_logon_enable_packet(dcc::LogonGroup::Now, _cid, _sid));
 }
 
 dcc::Packet RxTest::TinkerWithPacketLength(dcc::Packet packet) const {
